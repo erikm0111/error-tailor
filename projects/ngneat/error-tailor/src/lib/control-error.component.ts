@@ -64,7 +64,7 @@ export class DefaultControlErrorComponent implements ControlErrorComponent {
     }
   }
 
-  set text(value: string | null) {
+  public set text(value: string | null) {
     if (value !== this.errorText) {
       this.errorText = value;
       this.hideError = !value;
