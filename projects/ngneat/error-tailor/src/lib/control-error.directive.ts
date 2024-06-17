@@ -55,8 +55,8 @@ export class ControlErrorsDirective implements OnInit, OnDestroy {
   @Input() controlErrorAnchor: ControlErrorAnchorDirective;
 
   private ref: ComponentRef<ControlErrorComponent>;
-  private submit$: Observable<Event>;
-  private reset$: Observable<Event>;
+  // private submit$: Observable<Event>;
+  // private reset$: Observable<Event>;
   private control: AbstractControl;
   private destroy = new Subject<void>();
   private mergedConfig: ErrorTailorConfig = {};
@@ -69,13 +69,13 @@ export class ControlErrorsDirective implements OnInit, OnDestroy {
     @Inject(ErrorTailorConfigProvider) private config: ErrorTailorConfig,
     @Inject(FORM_ERRORS) private globalErrors,
     @Optional() private controlErrorAnchorParent: ControlErrorAnchorDirective,
-    @Optional() private form: FormActionDirective,
+    // @Optional() private form: FormActionDirective,
     @Optional() @Self() private ngControl: NgControl,
     @Optional() @Self() private controlContainer: ControlContainer,
   ) {
     this.host = elementRef.nativeElement as HTMLElement;
-    this.submit$ = this.form ? this.form.submit$ : EMPTY;
-    this.reset$ = this.form ? this.form.reset$ : EMPTY;
+    // this.submit$ = this.form ? this.form.submit$ : EMPTY;
+    // this.reset$ = this.form ? this.form.reset$ : EMPTY;
   }
 
   ngOnInit() {
@@ -124,23 +124,24 @@ export class ControlErrorsDirective implements OnInit, OnDestroy {
       changesOnBlur$ = blur$.pipe(switchMap(() => valueChanges$.pipe(startWith(true))));
     }
 
-    const submit$ = merge(
-      this.submit$.pipe(map(() => true)),
-      this.reset$.pipe(
-        map(() => false),
-        tap(() => this.hideError()),
-      ),
-    );
+    // const submit$ = merge(
+    //   this.submit$.pipe(map(() => true)),
+    //   this.reset$.pipe(
+    //     map(() => false),
+    //     tap(() => this.hideError()),
+    //   ),
+    // );
 
     // when submitted, submitFirstThenUponChanges
-    const changesOnSubmit$ = submit$.pipe(
-      switchMap((submit) => (submit ? controlChanges$.pipe(startWith(true)) : NEVER)),
-    );
+    // const changesOnSubmit$ = submit$.pipe(
+    //   switchMap((submit) => (submit ? controlChanges$.pipe(startWith(true)) : NEVER)),
+    // );
 
     // on reset, clear ComponentRef and customAnchorDestroyFn
-    this.reset$.pipe(takeUntil(this.destroy)).subscribe(() => this.clearRefs());
+    // this.reset$.pipe(takeUntil(this.destroy)).subscribe(() => this.clearRefs());
 
-    merge(changesOnAsync$, changesOnBlur$, changesOnChange$, changesOnSubmit$, changesOnStatusChange$)
+    // merge(changesOnAsync$, changesOnBlur$, changesOnChange$, changesOnSubmit$, changesOnStatusChange$)
+    merge(changesOnAsync$, changesOnBlur$, changesOnChange$, changesOnStatusChange$)
       .pipe(takeUntil(this.destroy))
       .subscribe(() => {
         const hasErrors = !!this.control.errors;
